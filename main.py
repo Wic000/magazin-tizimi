@@ -15,19 +15,27 @@ from routers import auth, products, sales, reports
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Ishga tushganda baza va default admin yaratish"""
-    init_db()
-    db = next(get_db())
-    if not db.query(User).filter(User.username == "admin").first():
-        admin = User(
-            username="admin",
-            password_hash=get_password_hash("admin123"),
-            full_name="Administrator",
-            role="admin"
-        )
-        db.add(admin)
-        db.commit()
-        print("Default admin yaratildi: admin / admin123")
-    db.close()
+    import traceback
+    try:
+        init_db()
+        db = next(get_db())
+        try:
+            if not db.query(User).filter(User.username == "admin").first():
+                admin = User(
+                    username="admin",
+                    password_hash=get_password_hash("admin123"),
+                    full_name="Administrator",
+                    role="admin"
+                )
+                db.add(admin)
+                db.commit()
+                print("Default admin: admin / admin123")
+        finally:
+            db.close()
+    except Exception as e:
+        print(f"STARTUP ERROR: {e}")
+        traceback.print_exc()
+        raise
     yield
     # shutdown
 

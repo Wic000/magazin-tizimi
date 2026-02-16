@@ -7,11 +7,10 @@ from config import settings
 # Render uchun PORT va DATABASE_URL muhit o'zgaruvchisidan
 # SQLite fallback - lokal ishlatish uchun
 if os.getenv("DATABASE_URL"):
-    # Render PostgreSQL - postgres:// -> postgresql://
     db_url = os.getenv("DATABASE_URL")
     if db_url.startswith("postgres://"):
         db_url = db_url.replace("postgres://", "postgresql://", 1)
-    engine = create_engine(db_url, pool_pre_ping=True)
+    engine = create_engine(db_url, pool_pre_ping=True, pool_size=1, max_overflow=0)
 else:
     os.makedirs("data", exist_ok=True)
     engine = create_engine(
