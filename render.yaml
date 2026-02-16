@@ -1,0 +1,14 @@
+# Render.com - bepul joylashtirish
+# https://render.com
+services:
+  - type: web
+    name: magazin-tizimi
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: SECRET_KEY
+        generateValue: true
+    # PostgreSQL: Dashboard → New PostgreSQL → Internal URL ni DATABASE_URL ga qo'shing

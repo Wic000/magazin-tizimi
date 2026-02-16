@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magazin tizimi</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Login sahifa -->
+    <div id="loginPage" class="page">
+        <div class="login-box">
+            <h1>Magazin tizimi</h1>
+            <p class="subtitle">Kirish</p>
+            <form id="loginForm">
+                <input type="text" id="username" placeholder="Foydalanuvchi nomi" required autocomplete="username">
+                <input type="password" id="password" placeholder="Parol" required autocomplete="current-password">
+                <button type="submit" class="btn btn-primary btn-lg">Kirish</button>
+            </form>
+            <p class="hint">Default: admin / admin123</p>
+        </div>
+    </div>
+
+    <!-- Asosiy sahifa -->
+    <div id="mainPage" class="page hidden">
+        <header class="header">
+            <button class="menu-btn" id="menuBtn" aria-label="Menyu">☰</button>
+            <h1>Magazin</h1>
+            <div class="user-info">
+                <span id="userName"></span>
+                <button class="btn btn-sm btn-outline" id="logoutBtn">Chiqish</button>
+            </div>
+        </header>
+        <nav class="sidebar" id="sidebar">
+            <button class="nav-btn active" data-page="sotuv">💰 Sotuv</button>
+            <button class="nav-btn" data-page="mahsulot">📦 Mahsulotlar</button>
+            <button class="nav-btn" data-page="ombor">🏪 Ombor</button>
+            <button class="nav-btn" data-page="hisobot">📊 Hisobot</button>
+        </nav>
+        <main class="content">
+            <!-- Sotuv oynasi -->
+            <section id="sotuvSection" class="section active">
+                <h2>Sotuv</h2>
+                <div class="sotuv-layout">
+                    <div class="product-select">
+                        <input type="text" id="sotuvSearch" placeholder="Mahsulot qidirish...">
+                        <div id="sotuvProductList" class="product-list"></div>
+                    </div>
+                    <div class="cart-area">
+                        <h3>Savatcha</h3>
+                        <div id="cartItems" class="cart-items"></div>
+                        <div class="cart-total">
+                            <strong>Jami: <span id="cartTotal">0</span> so'm</strong>
+                            <strong>Foyda: <span id="cartProfit">0</span> so'm</strong>
+                        </div>
+                        <button class="btn btn-success btn-lg" id="sellBtn" disabled>Sotish</button>
+                    </div>
+                </div>
+            </section>
+            <!-- Mahsulotlar -->
+            <section id="mahsulotSection" class="section">
+                <h2>Mahsulotlar</h2>
+                <div class="toolbar">
+                    <input type="text" id="productSearch" placeholder="Qidirish...">
+                    <button class="btn btn-primary" id="addProductBtn">+ Qo'shish</button>
+                    <label><input type="checkbox" id="showArchived"> Arxivni ko'rsatish</label>
+                </div>
+                <div id="productTable" class="table-wrap"></div>
+            </section>
+            <!-- Ombor -->
+            <section id="omborSection" class="section">
+                <h2>Ombor</h2>
+                <div class="stats-grid">
+                    <div class="stat-card"><span class="stat-label">Jami mahsulotlar</span><span id="statProducts" class="stat-value">0</span></div>
+                    <div class="stat-card"><span class="stat-label">Jami dona</span><span id="statQuantity" class="stat-value">0</span></div>
+                    <div class="stat-card"><span class="stat-label">Sotilgan</span><span id="statSold" class="stat-value">0</span></div>
+                    <div class="stat-card"><span class="stat-label">Jami foyda</span><span id="statProfit" class="stat-value">0</span></div>
+                    <div class="stat-card highlight"><span class="stat-label">Bugungi foyda</span><span id="statTodayProfit" class="stat-value">0</span></div>
+                </div>
+                <h3>Mahsulotlar ro'yxati</h3>
+                <div id="omborProductList" class="product-grid"></div>
+            </section>
+            <!-- Hisobot -->
+            <section id="hisobotSection" class="section">
+                <h2>Hisobot</h2>
+                <div class="report-filters">
+                    <label>Dan: <input type="date" id="reportFrom"></label>
+                    <label>Gacha: <input type="date" id="reportTo"></label>
+                    <button class="btn btn-primary" id="reportLoadBtn">Yuklash</button>
+                </div>
+                <div class="report-summary">
+                    <p>Bugungi foyda: <strong id="reportTodayProfit">0</strong> so'm</p>
+                </div>
+                <h3>Eng ko'p sotilgan mahsulotlar</h3>
+                <div id="topProducts" class="table-wrap"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal - Mahsulot qo'shish/tahrirlash -->
+    <div id="productModal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="productModalTitle">Mahsulot qo'shish</h3>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <input type="text" id="productName" placeholder="Nomi" required>
+                <input type="number" id="productPrice" placeholder="Sotuv narxi (so'm)" step="0.01" min="0" required>
+                <input type="number" id="productCostPrice" placeholder="Olish narxi (so'm)" step="0.01" min="0" value="0">
+                <input type="number" id="productQuantity" placeholder="Miqdor" min="0" value="0">
+                <input type="text" id="productUnit" placeholder="O'lchov birligi (dona)" value="dona">
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" id="productModalCancel">Bekor</button>
+                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
